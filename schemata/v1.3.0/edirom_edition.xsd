@@ -1,0 +1,1689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.edirom.de/ns/1.3" xmlns:tei="http://www.tei-c.org/ns/1.0"
+    targetNamespace="http://www.edirom.de/ns/1.3" xmlns:svg="http://www.w3.org/2000/svg" elementFormDefault="qualified"
+    xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <xs:annotation>
+        <xs:documentation xml:lang="de">Dieses Schema ist in der Version 1.2 zusammen mit der Edirom-Version 2010-06 veröffentlicht.</xs:documentation>
+    </xs:annotation>
+    
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Der XML-Namespace bietet Standard--Attribute für IDs und Sprachangaben</xs:documentation>
+        </xs:annotation>
+    </xs:import>
+    
+    <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd" />
+    
+    <xs:import namespace="http://www.w3.org/1999/xhtml" schemaLocation="xhtml1-strict.xsd" />
+    
+    
+    <!-- EDITION -->
+    <xs:element name="edition">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Das Wurzelelement einer Edition für die Edirom. Es beinhaltet sowohl Metaangaben zu der Edition selbst, als auch die in der Edition behandelten Werke.</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:all>
+
+                <!-- EDITION-NAME -->
+                <xs:element name="editionName" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Name der Edition</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                
+                <!-- LANGUAGES -->
+                <xs:element name="languages" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Die zur Verfügung stehenden Sprachen mit Angaben zur Vollständigkeit</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType>
+                        <xs:sequence>
+                            
+                            <!-- LANGUAGE -->
+                            <xs:element name="language" minOccurs="1" maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Angabe einer in der Edition genutzten Sprache</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="true">
+                                    <xs:attribute ref="xml:lang" use="required" />
+                                    <xs:attribute name="complete" type="xs:boolean" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <!-- PREFERENCES -->
+                <xs:element name="preferences" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>Referenz auf eine Edirom Online preferences Datei.</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType>
+                        <xs:attribute ref="xlink:href" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                
+                <!-- WORKS -->
+                <xs:element ref="works" minOccurs="1" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Die in der Edition enthaltenen Werke</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                
+            </xs:all>
+            
+            <!-- EDITION/@ID -->
+            <xs:attribute ref="xml:id" use="required">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Die ID der Edition setzt sich aus dem Präfix 'edition-' und einer 8-stelligen Zahl zusammen und sollte zumindest im Projektkontext eindeutig sein</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- WORKS -->
+    <xs:element name="works">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Die mit der Edition veröffentlichten Werke</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:sequence>
+              
+                <!-- WORK -->
+                <xs:element name="work" minOccurs="1" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein Werk beinhaltet Metaangaben zum Werk selbst, Satzstrukturen, vorkommende Stimmen und Einteilungen dieser in Stimmgruppen, Quellen, versch. Texte und Einzelanmerkungen</xs:documentation>
+                    </xs:annotation>
+
+                    <xs:complexType mixed="true">
+                        <xs:all minOccurs="0" maxOccurs="1">
+                            
+                            <!-- NAVIGATOR-DEFINITION bwb-->
+                            <xs:element name="navigatorDefinition">
+                                <xs:complexType mixed="true">
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        <xs:group ref="navigatorItemOrSeparator" minOccurs="0" maxOccurs="unbounded"/>
+                                        <xs:element ref="navigatorCategory" minOccurs="0" maxOccurs="unbounded"/>
+                                    </xs:choice>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- SEARCH-WINDOW-CONFIGURATION bwb-->
+                            <xs:element name="searchWindowConfig" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="itemGroup" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="names" minOccurs="0" maxOccurs="1"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="select" type="xs:string" use="required"/>
+                                                <xs:attributeGroup ref="att.sorting"/>
+                                                <xs:attribute name="name" type="xs:string"/>
+                                                <xs:attribute name="type" type="xs:string" use="optional"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- KONKORDANZEN -->
+                            <xs:element ref="concordances" minOccurs="0" maxOccurs="1"/>
+                            
+                            <!-- NAMES -->
+                            <!--<xs:element ref="names" minOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Der Name des Werkes mit eventuellen heute üblichen Zusätzen</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-->
+                            
+                            <!-- DATING -->
+                            <!--<xs:element ref="dating" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Datierung des Werkes</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-->
+                            
+                            <!-- COMPOSERS -->
+                            <!--<xs:element name="composers" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die an der Komposition beteiligten Personen</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        
+                                        <!-\- COMPOSER -\->
+                                        <xs:element name="composer" minOccurs="0" maxOccurs="unbounded" type="xs:string">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine an der Komposition beteiligte Person</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>-->
+                            
+                            <!-- LYRIC-WRITERS -->
+                            <!--<xs:element name="lyricWriters" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die an den Texten beteiligten Personen</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        
+                                        <!-\- LYRIC-WRITER -\->
+                                        <xs:element name="lyricWriter" minOccurs="0" maxOccurs="unbounded" type="xs:string">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine an den Texten beteiligte Person</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>-->
+                            
+                            <!-- PARTS -->
+                            <!--<xs:element name="parts" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de"> Die Teile (Sätze, Nummern, Akte, etc.) des Werkes</xs:documentation>
+                                </xs:annotation>
+
+                                <xs:complexType mixed="true">
+                                    <xs:sequence>
+                                        
+                                        <!-\- PART -\->
+                                        <xs:element ref="part" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Ein Teil (Satz, Nummer, Akt, o.ä.) eines Werkes</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>-->
+
+                            <!-- VOICES -->
+                            <!--<xs:element name="voices" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Gesamtbesetzung des Werkes zuzüglich Klavierstimmen o.ä. wenn vorhanden</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="true">
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        
+                                        <!-\- VOICE -\->
+                                        <xs:element ref="voice">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine Stimme innerhalb einer Partitur oder eines Stimmenauszugs</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        
+                                        <!-\- VOICE-GROUP -\->
+                                        <xs:element name="voiceGroup">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine Gruppe von Stimmen. Üblicherweise Bläser, Streicher, o.ä.</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType mixed="true">
+                                                <xs:sequence>
+                                                    
+                                                    <!-\- VOICE -\->
+                                                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="voice">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Eine Stimme innerhalb einer Stimmgruppe</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    
+                                                    <!-\- NAMES -\->
+                                                    <xs:element ref="names" minOccurs="1" maxOccurs="1">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Der Name der Stimmgruppe</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    
+                                                    <!-\- SHORT-NAME -\->
+                                                    <xs:element ref="shortName" minOccurs="1" maxOccurs="1">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Ein Kürzel für die Stimmgruppe</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                                
+                                                <!-\- VOICE-GROUP/@ID -\->
+                                                <xs:attribute ref="xml:id" use="required" />
+                                                
+                                                <!-\- VOICE-GROUP/@SORT-NO -\->
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:choice>
+                                </xs:complexType>
+                            </xs:element>-->
+                            
+                            <!-- ANNOTATIONS -->
+                            <!--<xs:element ref="annotations" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die zu diesem Werk gehörenden Einzel-Anmerkungen</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-->
+                            
+                            <!-- SOURCES -->
+                            <!--<xs:element ref="sources" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Quellen des Werkes</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-->
+                            
+                            <!-- TEXTS -->
+                            <!--<xs:element ref="texts" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Texte speziell zum Werk</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-->
+                        </xs:all>
+
+                        <!-- WORK/@ID -->
+                        <xs:attribute ref="xml:id" use="required" />
+                        
+                        <!-- WORK/@SORT-NO -->
+                        <xs:attribute name="sortNo" use="required" type="xs:int" />
+                        
+                        <!-- WORK/@xlink:href -->
+                        <xs:attribute ref="xlink:href" use="required" />
+                        
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ANNOTATIONS -->
+    <!--<xs:element name="annotations">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Die zu diesem Werk gehörenden Einzel-Anmerkungen</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                
+                <!-\- ANNOTATION -\->
+                <xs:element name="annotation" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Eine Einzelanmerkung bezieht sich in der Regel auf eine gewisse Anzahl zusammenhängender Take in versch. Quellen</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType mixed="true">
+                        <xs:all minOccurs="0" maxOccurs="1">
+                            
+                            <!-\- NAMES -\->
+                            <xs:element ref="names" minOccurs="0" maxOccurs="1"/>
+                            
+                            <!-\- PARTICIPANTS -\->
+                            <xs:element name="participants" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Objekte, die mit der Anmerkung verknüpft sind</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="false">
+                                    <xs:sequence>
+                                        <xs:element name="text" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType mixed="false">
+                                                <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="facsimile" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType mixed="false">
+                                                <xs:sequence>
+                                                    <xs:any namespace="http://www.w3.org/2000/svg" processContents="lax" minOccurs="0" maxOccurs="1" />
+                                                </xs:sequence>
+                                                <xs:attribute name="ref" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="facsimile-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="spot" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType mixed="false">
+                                                <xs:attribute name="facs" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="facsimile-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="x" type="xs:int" use="required"/>
+                                                <xs:attribute name="y" type="xs:int" use="required"/>
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="bar" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType mixed="false">
+                                                <xs:attribute name="ref" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="(bar|barGroup)-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="barRange" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType mixed="false">
+                                                <xs:attribute name="startid" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="(bar|barGroup)-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="endid" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="(bar|barGroup)-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                                
+                            </xs:element>
+                            
+                            <!-\- CATEGORIES -\->
+                            <xs:element name="categories" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Kategorie bzw. Kategorien der Anmerkung</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="false">
+                                    <xs:sequence>
+                                        
+                                        <!-\- CATEGORY -\->
+                                        <xs:element name="category" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine Kategorie einer Anmerkung</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:simpleType>
+                                                <xs:annotation>
+                                                    <xs:documentation xml:lang="de">Die gezeigten Anmerkungskategorien sind lediglich Beispiele bzw. Vorschläge</xs:documentation>
+                                                </xs:annotation>
+                                                <xs:union>
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="Bogensetzung" />
+                                                            <xs:enumeration value="Verbal instruction" />
+                                                            <xs:enumeration value="Embellishment" />
+                                                            <xs:enumeration value="Correction" />
+                                                            <xs:enumeration value="Diastematic mark" />
+                                                            <xs:enumeration value="Dynamics" />
+                                                            <xs:enumeration value="Harmony" />
+                                                            <xs:enumeration value="Rhythm" />
+                                                            <xs:enumeration value="Articulation" />
+                                                            <xs:enumeration value="Editorial intervention" />
+                                                            <xs:enumeration value="Inclusion from A" />
+                                                            <xs:enumeration value="Notational peculiarity" />
+                                                            <xs:enumeration value="Notational variant" />
+                                                            <xs:enumeration value="Notational imprecision" />
+                                                            <xs:enumeration value="Alteration by analogy" />
+                                                            <xs:enumeration value="Stemmatic Relationship" />
+                                                            <xs:enumeration value="Separative Variant" />
+                                                            <xs:enumeration value="Conjunctive Error" />
+                                                            <xs:enumeration value="Score" />
+                                                            <xs:enumeration value="Direction" />
+                                                            <xs:enumeration value="Lyrics" />
+                                                            <xs:enumeration value="Text" />
+                                                            <xs:enumeration value="Music" />
+                                                            <xs:enumeration value="Stage" />
+                                                            <xs:enumeration value="Scene" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value=".*"/>
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:union>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-\- CONTENTS -\->
+                            <xs:element name="contents" minOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Der Inhalt einer Anmerkung betseht aus einem im tei-Namespace geschriebenen Text kombiniert mit der Angabe weiterer anzuzeigender Takte</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="true">
+                                    <xs:sequence>
+                                        
+                                        <!-\- CONTENT -\->
+                                        <xs:element name="content" minOccurs="1">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Der Content besteht aus einem oder mehreren (versch. Sprachen) TEI-Elementen</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType mixed="true">
+                                                <xs:sequence>
+                                                    
+                                                    <!-\- ANY_TEI -\->
+                                                    <xs:any namespace="http://www.tei-c.org/ns/1.0" processContents="strict" minOccurs="1" maxOccurs="1" />
+                                                    
+                                                </xs:sequence>
+                                                
+                                                <xs:attribute ref="xml:lang" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                        
+                                        <!-\- FACSIMILE-FLOW -\->
+                                        <xs:element ref="facsimileFlow" minOccurs="0" maxOccurs="unbounded"/>
+                                        
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:all>
+                        
+                        
+                        <!-\- FIRST-BAR -\->
+                        <xs:attribute name="firstBar">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der erste Takt der Anmerkung aus dem angegeben Satz</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- LAST-BAR -\->
+                        <xs:attribute name="lastBar">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der letzte Takt der Anmerkung aus dem angegeben Satz</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- RELEVANCE -\->
+                        <xs:attribute name="relevance" use="required">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Relevanzkategorien: Zahlenwert</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:int">
+                                    <xs:pattern value="[0-3]" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- SOURCES -\->
+                        <xs:attribute name="sources">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Hier stehen alle Referenzen zu den Quellen</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREFS">
+                                    <xs:pattern value="(source-[0-9]+\s)*(source-[0-9]+)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- VOICES -\->
+                        <xs:attribute name="voices">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Hier stehen alle Referenzen zu den Stimmen</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREFS">
+                                    <xs:pattern value="(voice-[0-9]+\s)*(voice-[0-9]+)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- PART -\->
+                        <xs:attribute name="part">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Hier steht die Referenz zu dem Part</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREF">
+                                    <xs:pattern value="part-[0-9]+" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- GENERAL-REMARK -\->
+                        <xs:attribute name="generalRemarks">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Hier stehen alle Referenzen zu den Generellen Anmerkungen</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREFS">
+                                    <xs:pattern value="(generalRemark-[0-9]+\s)*(generalRemark-[0-9]+)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ANNOTATION/@ID -\->
+                        <xs:attribute ref="xml:id" use="required" />
+                        
+                        <!-\- ANNOTATION/@SORT-NO -\->
+                        <xs:attribute name="sortNo" use="required" type="xs:int" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+    
+    <!-- SOURCES -->
+    <!--<xs:element name="sources">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Die Quellen des Werkes</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                
+                <!-\- SOURCE -\->
+                <!-\-<xs:element name="source" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Eine Quelle beinhaltet Metadaten, Faksimiles und Ebenen auf diesen</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType mixed="true">
+                        <xs:sequence minOccurs="0">
+                            
+                            <!-\\- NAMES -\\->
+                            <xs:element ref="names" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Der Name der Quelle</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            
+                            <!-\\- SIGLUM -\\->
+                            <xs:element name="siglum" minOccurs="1" maxOccurs="1" type="xs:string">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Sigle der Quelle</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            
+                            <!-\\- DATING -\\->
+                            <xs:element ref="dating" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de"> Die Datierung der Quelle</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            
+                            <!-\\- LAYERS -\\->
+                            <xs:element name="layers" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Ebenen, die der Editor für diese Quelle angelegt hat</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="false">
+                                    <xs:sequence>
+                                        
+                                        <!-\\- LAYER -\\->
+                                        <xs:element name="layer" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine Ebene, die der Editor für diese Quelle angelegt hat</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType>
+                                                <xs:all>
+                                                    
+                                                    <!-\\- NAMES -\\->
+                                                    <xs:element ref="names">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Der Name der Ebene</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:all>
+                                                
+                                                <!-\\- LAYER/@ID -\\->
+                                                <xs:attribute ref="xml:id" use="required" />
+                                                
+                                                <!-\\- LAYER/@SORT-NO -\\->
+                                                <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-\\- DESCRIPTION -\\->
+                            <xs:element name="description" minOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Beschreibung der Quelle wird in einem oder mehreren (jeweils eins pro Sprache) tei-Element vorgehalten</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType>
+                                    <xs:choice>
+                                        <!-\\- ANY-TEI -\\->
+                                        <xs:any namespace="http://www.tei-c.org/ns/1.0" processContents="strict" maxOccurs="unbounded" />
+                                        <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" maxOccurs="unbounded"/>
+                                    </xs:choice>
+                                    
+                                    <!-\\- DESCRIPTION/@ID -\\->
+                                    <xs:attribute ref="xml:id" use="required" />
+
+                                    <!-\\- DESCRIPTION/@SORT-NO -\\->
+                                    <xs:attribute name="sortNo" use="required" type="xs:int" />
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-\\- FACSIMILES -\\->
+                            <!-\\-<xs:element ref="facsimiles">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Faksimiles der Quelle</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>-\\->
+                        </xs:sequence>
+                        
+                        <!-\\- SOURCE/@TYPE -\\->
+                        <xs:attribute name="type" use="required">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der Typ der Quelle</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="autograph" />
+                                    <xs:enumeration value="copyistsCopy" />
+                                    <xs:enumeration value="print" />
+                                    <xs:enumeration value="firstPrint" />
+                                    <xs:enumeration value="insignificant" />
+                                    <xs:enumeration value="edition" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@PARTS-OF -\\->
+                        <xs:attribute name="partsOf">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Enthält die Quelle autographe, andere Handschriftliche oder gedrukte Teile neben dem Quelltyp (z.B. Kopistenabschrift mit autographen Teilen)</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="autograph" />
+                                    <xs:enumeration value="handWriting" />
+                                    <xs:enumeration value="printed" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+
+                        <!-\\- SOURCE/@POSTHUMOUS -\\->
+                        <xs:attribute name="posthumous" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Ist die Quelle postum entstanden?</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@PRINT-TYPE -\\->
+                        <xs:attribute name="printType">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Art des Druckes</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="engravedPrinting" />
+                                    <xs:enumeration value="autography" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+
+                        <!-\\- SOURCE/@PLATE-NUMBER -\\->
+                        <xs:attribute name="plateNumber" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Plattennummer</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@FUNCTION -\\->
+                        <xs:attribute name="function">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Funktion der Quelle</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="draft" />
+                                    <xs:enumeration value="engraversModel" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@FORM -\\->
+                        <xs:attribute name="form">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Form der Quelle (Partitur, Klavierauszug, etc.)</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="score" />
+                                    <xs:enumeration value="pianoScore" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+
+                        <!-\\- SOURCE/@RELEVANCE -\\->
+                        <xs:attribute name="relevance">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Relevanz (Hauptquelle) Könnte möglicherweise auf Boolean umgesetzt werden</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="mainSource" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+
+                        <!-\\- SOURCE/@WRITER -\\->
+                        <xs:attribute name="writer" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der Verfasser der Quelle</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@PUBLISHER -\\->
+                        <xs:attribute name="publisher" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der Verleger</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@ID -\\->
+                        <xs:attribute ref="xml:id" use="required">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die ID der Quelle</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\\- SOURCE/@SORT-NO -\\->
+                        <xs:attribute name="sortNo" use="required" type="xs:int">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Die Sortierungsnummer der Quelle</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>-\->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+    
+    <!-- FACSIMILES -->
+    <!--<xs:element name="facsimiles">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Die Faksimiles einer Quelle</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                
+                <!-\- FACSIMILE -\->
+                <xs:element name="facsimile">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein Faksimile repräsentiert eine Seite</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType mixed="true">
+                        <xs:all minOccurs="0" maxOccurs="1">
+
+                            <!-\- NAME -\->
+                            <xs:element name="name" minOccurs="1" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Der Name der Seite</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            
+                            <!-\- LAYERS -\->
+                            <xs:element name="layers" minOccurs="0" maxOccurs="1">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Ebenen, die auf dieser Seite zur Verfügung stehen</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        
+                                        <!-\- LAYER -\->
+                                        <xs:element name="layer" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Eine Ebene auf dieser Seite. Ebenen werden über eingebettete SVG-Instanzen realisiert</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    
+                                                    <!-\- ANY-SVG -\->
+                                                    <xs:any namespace="http://www.w3.org/2000/svg" processContents="lax" minOccurs="1" maxOccurs="1" />
+                                                </xs:sequence>
+                                               
+                                                <!-\- LAYER/@LAYER -\->
+                                                <xs:attribute name="layer" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Eine Referenz zu welchem Layer diese konkrete Instanz gehört</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="layer-[0-9]+" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-\- BARS -\->
+                            <xs:element name="bars">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Die Takte auf der Seite</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType mixed="true">
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        
+                                        <!-\- BAR -\->
+                                        <xs:element name="bar">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Ein Takt auf einer Seite</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType mixed="true">
+                                                <xs:all maxOccurs="1">
+                                                    
+                                                    <!-\- COORDINATES -\->
+                                                    <xs:element ref="coordinates" minOccurs="1">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Die Koordinaten der graphischen Repräsentanz eines Taktes auf einem Faksimile</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:all>
+                                                
+                                                <!-\- BAR/@VOICES -\->
+                                                <xs:attribute name="voices">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Hier sollten die Stimmen referenziert werden, falls nötig</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREFS">
+                                                            <xs:pattern value="(voice-[0-9]+\s)*(voice-[0-9]+)" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+
+                                                <!-\- BAR/@NAME -\->
+                                                <xs:attribute name="name" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Der Name des Taktes (Nummer (+ Buchstabe): 16 oder 34d)</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@UPBEAT -\->
+                                                <xs:attribute name="upbeat" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Ist der Takt ein Auftakt?</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@CUT -\->
+                                                <xs:attribute name="cut" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Ist der Takt gestrichen worden?</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@ADD -\->
+                                                <xs:attribute name="add" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Ist der Takt nachträglich hinzugefügt worden</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@PART -\->
+                                                <xs:attribute name="part">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Zu welchem Teil des Werkes gehört der Takt</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="(part-[0-9]+\s)*(part-[0-9]+)"/>
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@ID -\->
+                                                <xs:attribute ref="xml:id" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Die ID des Taktes</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR/@SORT-NO -\->
+                                                <xs:attribute name="sortNo" type="xs:int" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Die Sortierungsnummer des Taktes</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+
+
+                                                <!-\- BAR/@HIDDEN -\->
+                                                <xs:attribute name="hidden" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Soll der Takt in der Anzeige versteckt werden?</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        
+                                        <!-\- BAR-GROUP -\->
+                                        <xs:element name="barGroup">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">A group of bars. Used for example for multi-rest bars</xs:documentation>
+                                            </xs:annotation>
+                                            
+                                            <xs:complexType mixed="true">
+                                                <xs:all maxOccurs="1">
+                                                    
+                                                    <!-\- COORDINATES -\->
+                                                    <xs:element ref="coordinates" minOccurs="1">
+                                                        <xs:annotation>
+                                                            <xs:documentation xml:lang="de">Die Koordinaten der graphischen Repräsentanz eines Taktes auf einem Faksimile</xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:all>
+                                                
+                                                <!-\- BAR-GROUP/@FIRST-BAR -\->
+                                                <xs:attribute name="firstBar" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Der erste Takt dieser Gruppe</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@LAST-BAR -\->
+                                                <xs:attribute name="lastBar" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Der letzte Takt dieser Gruppe</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@PART -\->
+                                                <xs:attribute name="part" use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Eine Referenz auf den Part</xs:documentation>
+                                                    </xs:annotation>
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREF">
+                                                            <xs:pattern value="(part-[0-9]+\s)*(part-[0-9]+)"/>
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@CUT -\->
+                                                <xs:attribute name="cut" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Ist die Taktgruppe gestrichen worden?</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@ADD -\->
+                                                <xs:attribute name="add" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Ist die Taktgruppe nachträglich hinzugefügt worden</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@VOICES -\->
+                                                <xs:attribute name="voices">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Hier sollten die Stimmen referenziert werden</xs:documentation>
+                                                    </xs:annotation>
+                                                    
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:IDREFS">
+                                                            <xs:pattern value="(voice-[0-9]+\s)*(voice-[0-9]+)" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                                
+                                                <!-\- BAR-GROUP/@ID -\->
+                                                <xs:attribute ref="xml:id" use="required" />
+                                                
+                                                <!-\- BAR-GROUP/@SORT-NO -\->
+                                                <xs:attribute name="sortNo" type="xs:int" use="required" />
+
+                                                <!-\- BAR/@HIDDEN -\->
+                                                <xs:attribute name="hidden" use="optional" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation xml:lang="de">Soll die Taktgruppe in der Anzeige versteckt werden?</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:choice>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:all>
+
+                        <!-\- FACSIMILE/@PATH -\->
+                        <xs:attribute name="path" use="required" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Der Pfad zu der Bilddatei</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\- FACSIMILE/@FOLIO -\->
+                        <xs:attribute name="folio" use="required">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Vorder- oder Rückseite</xs:documentation>
+                            </xs:annotation>
+                            
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="recto" />
+                                    <xs:enumeration value="verso" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- FACSIMILE/@WIDTH -\->
+                        <xs:attribute name="width" use="required" type="xs:int">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de"> Breite des Bildes in Pixel</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\- FACSIMILE/@HEIGHT -\->
+                        <xs:attribute name="height" use="required" type="xs:int">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="de">Höhe des Bildes in Pixel</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        
+                        <!-\- FACSIMILE/@ID -\->
+                        <xs:attribute ref="xml:id" use="required" />
+                        
+                        <!-\- FACSIMILE/@SORT-NO -\->
+                        <xs:attribute name="sortNo" use="required" type="xs:int" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+
+
+    <!-- TEXTS -->
+    <!--<xs:element name="texts">
+        <xs:annotation>
+            <xs:documentation xml:lang="de"> Die Texte speziell zum Werk</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                
+                <!-\- TEXT -\->
+                <xs:element name="text" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein Text zum Werk. Der Text wir las tei-Element gespeichert</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType mixed="true">
+                        <xs:sequence>
+                            
+                            <!-\- HEADER -\->
+                            <xs:element name="header">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="de">Der Metadatenbereich des Textes</xs:documentation>
+                                </xs:annotation>
+                                
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        
+                                        <!-\- DATING -\->
+                                        <xs:element ref="dating" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Die Datierung des Textes</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        
+                                        <!-\- AUTHOR -\->
+                                        <xs:element name="author" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Ein Autor des Textes</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        
+                                        <!-\- TRANSLATOR -\->
+                                        <xs:element name="translator" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="de">Ein Übersetzer des Textes</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <xs:choice>
+                                <!-\- ANY-TEI -\->
+                                <xs:any namespace="http://www.tei-c.org/ns/1.0" processContents="strict" maxOccurs="unbounded" />
+                                <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" maxOccurs="unbounded"/>
+                            </xs:choice>
+                        </xs:sequence>
+
+                        <!-\- TEXT/@ID -\->
+                        <xs:attribute ref="xml:id" use="required" />
+                        
+                        <!-\- TEXT/@TYPE -\->
+                        <xs:attribute name="type" use="optional" type="xs:string" />
+
+                        <!-\- TEXT/@SORT-NO -\->
+                        <xs:attribute name="sortNo" use="required" type="xs:int" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+
+    <!-- PART -->
+    <!--<xs:element name="part">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Ein Satz, Akt, eine Nummer, o.ä.</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                
+                <!-\- NAMES -\->
+                <xs:element ref="names">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Der Name des Teils</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                
+                <!-\- ENSEMBLE -\->
+                <xs:element name="ensemble" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Die Besetzung des Teiles</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType>
+                        
+                        <!-\- ENSEMBLE/@VOICES -\->
+                        <xs:attribute name="voices">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREFS">
+                                    <xs:pattern value="(voice-[0-9]+/s)*(voice-[0-9]+)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-\- PART -\->
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Verschachtelung für die Teile</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+
+            <!-\- PART/@TEMPO -\->
+            <xs:attribute name="tempo" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Das Tempo des Teils</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+
+            <!-\- PART/@TYPE -\->
+            <xs:attribute name="type">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Der Typ des Teils (Satz, Nummer, Akt, Scene, etc.)</xs:documentation>
+                </xs:annotation>
+                
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="movement" />
+                        <xs:enumeration value="number" />
+                        <xs:enumeration value="act" />
+                        <xs:enumeration value="scene" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            
+            <!-\- PART/@ID -\->
+            <xs:attribute ref="xml:id" use="required" />
+            
+            <!-\- PART/@SORT-NO -\->
+            <xs:attribute name="sortNo" use="required" type="xs:int" />
+        </xs:complexType>
+    </xs:element>-->
+
+    <!-- VOICE -->
+    <!--<xs:element name="voice">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Eine Stimme des Werkes</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:all>
+
+                <!-\- NAMES -\->
+                <xs:element ref="names">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Name der Stimme</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <!-\- SHORT-NAME -\->
+                <xs:element ref="shortName" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Kürzel der Stimme</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:all>
+
+            <!-\- VOICE/@TUNE -\->
+            <xs:attribute name="tune" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Die Stimmung des Instruments (kann man da Werte vorgeben?)</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            
+            <!-\- VOICE/@ID -\->
+            <xs:attribute ref="xml:id" use="required"/>
+            
+            <!-\- VOICE/@SORT-NO -\->
+            <xs:attribute name="sortNo" use="required" type="xs:int" />
+        </xs:complexType>
+    </xs:element>-->
+
+    <!-- COORDINATES -->
+    <!--<xs:element name="coordinates">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Die Koordinaten eines Elementes auf einer Faksimile-Seite</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <!-\- COORDINATES/@X -\->
+            <xs:attribute name="x" use="required" type="xs:int" />
+            <!-\- COORDINATES/@Y -\->
+            <xs:attribute name="y" use="required" type="xs:int" />
+            <!-\- COORDINATES/@WIDTH -\->
+            <xs:attribute name="width" use="required" type="xs:int" />
+            <!-\- COORDINATES/@HEIGHT -\->
+            <xs:attribute name="height" use="required" type="xs:int" />
+        </xs:complexType>
+    </xs:element>-->
+    
+    <!-- DATING -->
+    <!--<xs:element name="dating">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Eine Datierung</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:any namespace="http://www.tei-c.org/ns/1.0" processContents="strict" minOccurs="1" maxOccurs="1" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+    
+    <!-- SHORT-NAME -->
+    <!--<xs:element name="shortName" type="xs:string">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Ein Kürzel</xs:documentation>
+        </xs:annotation>
+    </xs:element>-->
+    
+    <!-- NAME -->
+    <xs:element name="name">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Der Name eines Objektes</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            <xs:choice>
+                <xs:any namespace="http://www.tei-c.org/ns/1.0" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
+                <xs:any namespace="http://www.w3.org/1999/xhtml" processContents="strict" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+            
+            <!-- NAME/@XML:LANG -->
+            <xs:attribute ref="xml:lang" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="label">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Das Label einer Objektart</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="true">
+            
+            <!-- TITLE/@XML:LANG -->
+            <xs:attribute ref="xml:lang" />
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- NAMES -->
+    <xs:element name="names">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Meta-Element "Names", dass die internationalisierten Namen aufnimmt</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="false">
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="name" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein Name eines Objekts</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="labels">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">Meta-Element "labels", dass die internationalisierten Label aufnimmt</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="false">
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="label" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein Label einer Objektart</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!-- FACSIMILE-FLOW -->
+    <!--<xs:element name="facsimileFlow">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">In Anmerkungen zusätzlich anzuzeigende Faksimileausschnitte</xs:documentation>
+        </xs:annotation>
+        
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                
+                <!-\- ITEM -\->
+                <xs:element name="item" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Ein in einer Anmerkung zusätzlich anzuzeigender Faksimileausschnitt</xs:documentation>
+                    </xs:annotation>
+                    
+                    <xs:complexType mixed="false">
+                        
+                        <xs:attribute name="type" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="bar"/>
+                                    <xs:enumeration value="barRange"/>
+                                    <xs:enumeration value="spot"/>
+                                    <xs:enumeration value="facsimile"/>
+                                    <xs:enumeration value="text"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <xs:attribute name="facsimile" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREF">
+                                    <xs:pattern value="facsimile-[0-9]+" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <xs:attribute name="x" use="optional" type="xs:int">
+                        </xs:attribute>
+                        
+                        <xs:attribute name="y" use="optional" type="xs:int">
+                        </xs:attribute>
+                        
+                        <xs:attribute name="width" use="optional" type="xs:int">
+                        </xs:attribute>
+                        
+                        <xs:attribute name="height" use="optional" type="xs:int">
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@WORK -\->
+                        <xs:attribute name="work" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREF">
+                                    <xs:pattern value="work-[0-9]+" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@SOURCE -\->
+                        <xs:attribute name="source" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREF">
+                                    <xs:pattern value="source-[0-9]+" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@SORT-NO -\->
+                        <xs:attribute name="sortNo" use="required" type="xs:int"/>
+                        
+                        <!-\- ITEM/@FIRST-BAR -\->
+                        <xs:attribute name="firstBar" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@LAST-BAR -\->
+                        <xs:attribute name="lastBar" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="(U-)?[0-9]+[a-z]?" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@PART -\->
+                        <xs:attribute name="part" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREF">
+                                    <xs:pattern value="part-[0-9]+" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        
+                        <!-\- ITEM/@VOICES -\->
+                        <xs:attribute name="voices" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:IDREFS">
+                                    <xs:pattern value="(voice-[0-9]+/s)*(voice-[0-9]+)" />
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>-->
+    
+    
+    <!-- Konkordanzen -->
+    <xs:element name="concordances">
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element name="concordance" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType mixed="false">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs="1" ref="names"/>
+                            <xs:choice maxOccurs="1">
+                                <xs:element ref="groups"/>
+                                <xs:element ref="connections"/>
+                            </xs:choice>
+                        </xs:sequence>
+                        
+                        <xs:attribute name="name" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="groups">
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="1" ref="labels"/>
+                <xs:element name="group" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType mixed="false">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs="1" ref="names"/>
+                            <xs:element minOccurs="1" maxOccurs="1" ref="connections"/>
+                        </xs:sequence>
+
+                        <xs:attribute name="name" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            
+            <xs:attribute name="label" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="connections">
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="1" ref="labels"/>
+                <xs:element name="connection" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType mixed="false">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" maxOccurs="1" ref="names"/>
+                        </xs:sequence>
+                        
+                        <xs:attribute name="name" type="xs:string"/>
+                        <xs:attribute name="plist" use="required">
+                            <xs:simpleType>
+                                <xs:union>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:anyURI"/>
+                                    </xs:simpleType>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:whiteSpace value="preserve"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:union>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            
+            <xs:attribute name="label" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- Flexible Navigator -->
+    <xs:attributeGroup name="att.sorting">
+        <xs:attribute name="sortNo" type="xs:int" use="required"/>
+    </xs:attributeGroup>
+    
+    <xs:group name="navigatorItemOrSeparator">
+        <xs:choice>
+            <xs:element ref="navigatorItem" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="navigatorSeparator" minOccurs="0" maxOccurs="1"/>
+        </xs:choice>
+    </xs:group>
+    
+    <xs:group name="navigatorContents">
+        <xs:choice>
+            <xs:element ref="navigatorCategory" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="navigatorItem" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="navigatorSeparator" minOccurs="0" maxOccurs="1"/>
+        </xs:choice>
+    </xs:group>
+    
+    <xs:element name="navigatorCategory">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="names" minOccurs="1" maxOccurs="1"/>
+                <xs:group ref="navigatorContents" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute ref="xml:id" use="required" />
+            <xs:attributeGroup ref="att.sorting"/>
+            <xs:attribute name="targets" type="xs:anyURI" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="navigatorItem">
+        <xs:complexType mixed="true">
+            <xs:all>
+                <xs:element ref="names" minOccurs="1"/>
+            </xs:all>
+            <xs:attribute ref="xml:id" use="required"/>
+            <xs:attributeGroup ref="att.sorting"/>
+            <xs:attribute name="targets" type="xs:anyURI" use="required"/>
+        </xs:complexType>
+    </xs:element>
+   
+    <xs:element name="navigatorSeparator">
+        <xs:complexType mixed="false">
+            <xs:attributeGroup ref="att.sorting"/>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>
