@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    
+    <define name="element-entry">
+        <element name="entry">
+            <attribute name="key">
+                <!-- allowed values
+                    image_prefix
+                    leaflet_prefix
+                            <entry key="application_language" value="en"/>
+					        <entry key="annotation_layout" value="EdiromOnline.view.window.annotationLayouts.AnnotationLayout1"/>
+					        <entry key="image_prefix" value="http://0.0.0.0:8081/digilib/Scaler/"/>
+					        <entry key="edition_path" value="/db/apps/contents"/>
+					                <entry key="application_language" value="de"/>
+        <entry key="annotation_layout" value="EdiromOnline.view.window.annotationLayouts.AnnotationLayout1"/>
+        <entry key="image_prefix" value="../../../digilib/Scaler/"/>
+        <entry key="leaflet_prefix" value="/exist/rest/db/contents/leafletImages/"/>
+        <entry key="image_server" value="leaflet"/> 
+        <!-/-<entry key="image_server" value="digilib"/>-/->
+        <entry key="edition_path" value="/db/apps/contents"/>
+                    image_server:: (digilib|leaflet|openseadragon)
+                    OPERA
+                    application_language, e.g. en
+                    annotation_layout
+                    concordance_navigator_open_on_start (true|false)
+                    
+                    PLUGINS_JS
+                    entry key="plugin_additionalJS" value="../../../exist/rest/db/contents/edition-74338557/js/extra.min.js"/>
+                    e.g. plugin_textview" value="../../../exist/rest/db/contents/edition-74338557/js/TextViewPlugin.min.js"/
+                    PLUGINS-XQL
+                    e.g. key="data/xql/getLinkTarget.xql" value="../../../exist/rest/db/contents/edition-74338557/xql/getLinkTarget.xql"
+                -->
+            </attribute>
+            <attribute name="value">
+            </attribute>
+        </element>
+    </define>
+    <start>
+        <element name="prefs">
+            <element name="version">
+                <value>1.0</value>
+            </element>
+            <element name="entries">
+                <ref name="element-entry"></ref>
+                    <zeroOrMore>
+                        <ref name="element-entry"></ref>
+                    </zeroOrMore>
+                
+            </element>
+        </element>
+    </start>
+</grammar>
