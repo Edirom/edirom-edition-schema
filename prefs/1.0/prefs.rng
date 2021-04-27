@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar 
-    xmlns="http://relaxng.org/ns/structure/1.0"
-    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
-    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-    
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
     <define name="element-entry">
         <element name="entry">
             <attribute name="key">
@@ -34,8 +30,7 @@
                     e.g. key="data/xql/getLinkTarget.xql" value="../../../exist/rest/db/contents/edition-74338557/xql/getLinkTarget.xql"
                 -->
             </attribute>
-            <attribute name="value">
-            </attribute>
+            <attribute name="value"> </attribute>
         </element>
     </define>
     <start>
