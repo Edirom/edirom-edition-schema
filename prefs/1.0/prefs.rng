@@ -44,11 +44,17 @@
                 <value>1.0</value>
             </element>
             <element name="entries">
-                <ref name="element-entry"></ref>
-                    <zeroOrMore>
-                        <ref name="element-entry"></ref>
-                    </zeroOrMore>
-                
+                <element name="entry">
+                    <attribute name="key">
+                        <value>application_language</value>
+                    </attribute>
+                    <attribute name="value">
+                        <data type="NMTOKEN" />
+                    </attribute>
+                </element>
+                <zeroOrMore>
+                    <ref name="element-entry" />
+                </zeroOrMore>
             </element>
         </element>
     </start>
