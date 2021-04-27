@@ -52,6 +52,19 @@
                         <data type="NMTOKEN" />
                     </attribute>
                 </element>
+                <element name="entry">
+                    <attribute name="key">
+                        <value>annotation_layout</value>
+                    </attribute>
+                    <attribute name="value">
+                        <choice>
+                            <value>EdiromOnline.view.window.annotationLayouts.AnnotationLayout1</value>
+                            <value>EdiromOnline.view.window.annotationLayouts.AnnotationLayout2</value>
+                            <value>EdiromOnline.view.window.annotationLayouts.AnnotationLayout3</value>
+                            <value>EdiromOnline.view.window.annotationLayouts.AnnotationLayout4</value>
+                        </choice>
+                    </attribute>
+                </element>
                 <zeroOrMore>
                     <ref name="element-entry" />
                 </zeroOrMore>
