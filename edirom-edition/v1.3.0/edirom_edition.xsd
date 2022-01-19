@@ -1587,7 +1587,7 @@
     <xs:element name="groups">
         <xs:complexType mixed="false">
             <xs:sequence>
-                <xs:element minOccurs="0" maxOccurs="1" ref="labels"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="names"/>
                 <xs:element name="group" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType mixed="false">
                         <xs:sequence>
