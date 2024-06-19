@@ -60,6 +60,15 @@
                         </choice>
                     </attribute>
                 </element>
+                <element name="entry">
+                    <attribute name="key">
+                        <value>additional_css_path</value>
+                    </attribute>
+                    <attribute name="value">
+                        <a:documentation>this should be a uri relative to the target collection of the edition</a:documentation>
+                        <data type="anyURI" />
+                    </attribute>
+                </element>
                 <zeroOrMore>
                     <ref name="element-entry" />
                 </zeroOrMore>
